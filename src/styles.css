@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "flowbite/src/themes/default";
+
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+:root {
+    --main-color: #16a34a;
+    --main-dark: #166534;
+    --surface: #ffffff;
+    --soft-bg: #f7faf7;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: var(--soft-bg);
+    color: var(--text);
+}
+
+img { display: block; }
+
+a { text-decoration: none; }
+
+@utility container {
+    width: min(92%, 1180px);
+    margin-inline: auto;
+}
+
+@layer components {
+    .btn {
+        @apply disabled:bg-gray-300 disabled:cursor-not-allowed bg-green-600 text-white text-[15px] font-semibold py-2.5 px-4 cursor-pointer w-full hover:bg-green-700 transition-all duration-200 rounded-lg shadow-sm;
+    }
+
+    .page-title {
+        @apply text-3xl md:text-4xl font-bold text-gray-900;
+    }
+
+    .section-title {
+        @apply text-2xl md:text-3xl font-bold text-gray-900 mb-6;
+    }
+
+    .surface-card {
+        @apply bg-white border border-gray-200 rounded-2xl shadow-sm;
+    }
+
+    .form-control {
+        @apply w-full p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition;
+    }
+}
+
+.card {
+    @apply bg-white border border-gray-200 shadow-sm p-3 relative rounded-2xl transition-all duration-300;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(17, 24, 39, 0.10);
+    border-color: #bbf7d0;
+}
+
+.btn-main {
+    background-color: var(--main-color);
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-main:disabled {
+    cursor: not-allowed;
+    background-color: #cbd5e1;
+}
+
+.btn-main:hover:not(:disabled) {
+    background-color: var(--main-dark);
+}
+
+::selection {
+    background: #bbf7d0;
+    color: #14532d;
+}

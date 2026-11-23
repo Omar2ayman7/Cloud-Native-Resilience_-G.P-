@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-deployment
+  namespace: freshcart
+  labels:
+    app: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment
+          image: omaraymane/freshcart-payment:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3005
+          env:
+            - name: PORT
+              value: "3005"
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: NODE_ENV
+            - name: FRONTEND_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: FRONTEND_ORIGIN
+            - name: GATEWAY_PUBLIC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: GATEWAY_PUBLIC_URL
+            - name: PAYMENT_PROVIDER
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: PAYMENT_PROVIDER
+            - name: STRIPE_CURRENCY
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: STRIPE_CURRENCY
+            - name: SUPABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: SUPABASE_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: JWT_SECRET
+            - name: SUPABASE_SERVICE_ROLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: SUPABASE_SERVICE_ROLE_KEY
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: STRIPE_SECRET_KEY
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: STRIPE_WEBHOOK_SECRET
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "384Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3005
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 4
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3005
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: freshcart
+  labels:
+    app: payment
+spec:
+  type: ClusterIP
+  selector:
+    app: payment
+  ports:
+    - name: http
+      port: 3005
+      targetPort: 3005
+      protocol: TCP

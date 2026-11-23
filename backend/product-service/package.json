@@ -1,0 +1,8 @@
+{
+  "name": "freshcart-product-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev":"node --watch src/server.js","start":"node src/server.js","check":"node --check src/server.js"},
+  "dependencies": {"@supabase/supabase-js":"^2.49.4","dotenv":"^16.4.7","express":"^5.1.0"}
+}

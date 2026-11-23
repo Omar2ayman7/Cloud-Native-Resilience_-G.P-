@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment
+  namespace: freshcart
+  labels:
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+        - name: cart
+          image: omaraymane/freshcart-cart:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3003
+          env:
+            - name: PORT
+              value: "3003"
+            - name: SUPABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: SUPABASE_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: JWT_SECRET
+            - name: SUPABASE_SERVICE_ROLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: SUPABASE_SERVICE_ROLE_KEY
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "384Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 4
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-service
+  namespace: freshcart
+  labels:
+    app: cart
+spec:
+  type: ClusterIP
+  selector:
+    app: cart
+  ports:
+    - name: http
+      port: 3003
+      targetPort: 3003
+      protocol: TCP

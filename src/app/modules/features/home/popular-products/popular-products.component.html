@@ -1,0 +1,15 @@
+<section class="py-10">
+    <div class="container">
+        <div class="flex items-end justify-between gap-4 mb-7">
+            <div>
+                <p class="text-green-600 font-semibold text-sm uppercase tracking-wider">Best sellers</p>
+                <h2 class="section-title !mb-0 mt-1">Popular Products</h2>
+            </div>
+        </div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            @for (product of ProductsList().slice(0,8); track product._id) {
+                <app-card [product]="product"></app-card>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,38 @@
+<section class="py-10">
+    <div class="container">
+        @if (isLoading()) {
+            <div class="py-16 text-center text-gray-500">Loading product...</div>
+        } @else if (errorMessage()) {
+            <div class="py-16 text-center text-red-600">{{ errorMessage() }}</div>
+        } @else if (productDetails(); as product) {
+            <div class="surface-card p-5 md:p-8 lg:p-10">
+                <div class="grid md:grid-cols-12 items-center gap-8 lg:gap-12">
+                    <div class="md:col-span-5 lg:col-span-4">
+                        <div class="bg-gray-50 rounded-2xl p-5">
+                            <img [src]="product.imageCover" class="w-full max-h-[430px] object-contain" [alt]="product.title">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-7 lg:col-span-8">
+                        <span class="inline-block px-3 py-1 rounded-full bg-green-50 text-green-700 text-sm font-semibold">{{ product.category.name }}</span>
+                        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mt-4 leading-tight">{{ product.title }}</h1>
+                        <p class="text-gray-500 leading-7 mt-4 max-w-3xl">{{ product.description }}</p>
+
+                        <div class="flex flex-wrap items-center gap-5 mt-6 pb-6 border-b border-gray-200">
+                            <span class="text-3xl font-bold text-green-700">{{ product.price }} EGP</span>
+                            <span class="text-gray-600 bg-yellow-50 px-3 py-1.5 rounded-lg">
+                                <i class="fas fa-star text-yellow-500 me-1"></i>{{ product.ratingsAverage }} rating
+                            </span>
+                        </div>
+
+                        <div class="mt-6 max-w-sm">
+                            <button (click)="addProductToCart(product._id)" class="btn">
+                                <i class="fas fa-cart-plus me-2"></i>Add To Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

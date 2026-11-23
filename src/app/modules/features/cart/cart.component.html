@@ -1,0 +1,75 @@
+<section class="py-10">
+    @if (isLoading()) {
+        <div class="container py-16 text-center text-gray-500">Loading cart...</div>
+    } @else if (errorMessage()) {
+        <div class="container py-16 text-center text-red-600">{{ errorMessage() }}</div>
+    } @else if (cartDetails(); as cart) {
+        <div class="container">
+            <div class="mb-8">
+                <p class="text-green-600 font-semibold text-sm uppercase tracking-wider">Your basket</p>
+                <h1 class="page-title mt-1">Shopping Cart</h1>
+                <p class="text-gray-500 mt-2">{{ cart.products.length }} item(s) in your cart</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-8 space-y-4">
+                    @if (cart.products.length === 0) {
+                        <div class="surface-card p-10 text-center">
+                            <i class="fas fa-cart-shopping text-4xl text-green-200 mb-4"></i>
+                            <h2 class="text-xl font-semibold text-gray-800">Your cart is empty</h2>
+                            <p class="text-gray-500 mt-2">Add some products and they will appear here.</p>
+                            <a routerLink="/products" class="inline-block mt-5 px-5 py-2.5 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition">Browse Products</a>
+                        </div>
+                    } @else {
+                        @for (item of cart.products; track item.product._id) {
+                            <div class="surface-card p-4 md:p-5">
+                                <div class="grid grid-cols-[90px_1fr] md:grid-cols-[110px_1fr_auto] gap-4 items-center">
+                                    <div class="bg-gray-50 rounded-xl overflow-hidden">
+                                        <img [src]="item.product.imageCover" [alt]="item.product.title" class="w-full aspect-square object-contain p-2">
+                                    </div>
+
+                                    <div class="min-w-0">
+                                        <h3 class="font-semibold text-gray-900 line-clamp-2">{{ item.product.title }}</h3>
+                                        <p class="text-sm text-gray-500 mt-1">{{ item.price }} EGP each</p>
+
+                                        <div class="flex flex-wrap items-center gap-3 mt-4">
+                                            <div class="inline-flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                                <button (click)="updateCountOfItem(item.product._id, item.count - 1)" class="w-9 h-9 cursor-pointer hover:bg-gray-200 transition" aria-label="Decrease quantity">
+                                                    <i class="fas fa-minus text-xs"></i>
+                                                </button>
+                                                <span class="w-10 text-center font-semibold">{{ item.count }}</span>
+                                                <button (click)="updateCountOfItem(item.product._id, item.count + 1)" class="w-9 h-9 cursor-pointer hover:bg-gray-200 transition" aria-label="Increase quantity">
+                                                    <i class="fas fa-plus text-xs"></i>
+                                                </button>
+                                            </div>
+                                            <button (click)="removeItemOfCart(item.product._id)" class="cursor-pointer text-sm text-red-500 hover:text-red-700 transition">
+                                                <i class="fas fa-trash-can me-1"></i> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-2 md:col-span-1 text-right md:text-left">
+                                        <span class="font-bold text-green-700 text-lg">{{ item.price * item.count }} EGP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <aside class="lg:col-span-4 surface-card p-5 md:p-6 lg:sticky lg:top-24">
+                    <h2 class="text-xl font-bold text-gray-900">Order Summary</h2>
+                    <div class="flex items-center justify-between py-5 border-b border-gray-200 mt-2">
+                        <span class="text-gray-500">Items</span>
+                        <span class="font-medium">{{ cart.products.length }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-5">
+                        <span class="font-semibold text-gray-800">Total</span>
+                        <span class="font-bold text-2xl text-green-700">{{ cart.totalCartPrice }} EGP</span>
+                    </div>
+                    <button [routerLink]="['/checkout', cart._id]" [disabled]="cart.products.length === 0" class="btn">Proceed To Checkout</button>
+                </aside>
+            </div>
+        </div>
+    }
+</section>

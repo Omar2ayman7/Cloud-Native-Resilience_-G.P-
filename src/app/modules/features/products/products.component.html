@@ -1,0 +1,14 @@
+<section class="py-10">
+    <div class="container">
+        <div class="mb-8">
+            <p class="text-green-600 font-semibold text-sm uppercase tracking-wider">Fresh picks</p>
+            <h2 class="page-title mt-1">All Products</h2>
+            <p class="text-gray-500 mt-2">Browse our latest products and add your favorites to the cart.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            @for (product of ProductsList(); track product._id) {
+                <app-card [product]="product"></app-card>
+            }
+        </div>
+    </div>
+</section>

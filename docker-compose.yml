@@ -1,0 +1,108 @@
+services:
+  auth-service:
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    container_name: freshcart-auth-service
+    env_file:
+      - ./backend/auth-service/.env
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  product-service:
+    build:
+      context: ./backend/product-service
+      dockerfile: Dockerfile
+    container_name: freshcart-product-service
+    env_file:
+      - ./backend/product-service/.env
+    ports:
+      - "3002:3002"
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  cart-service:
+    build:
+      context: ./backend/cart-service
+      dockerfile: Dockerfile
+    container_name: freshcart-cart-service
+    env_file:
+      - ./backend/cart-service/.env
+    ports:
+      - "3003:3003"
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  order-service:
+    build:
+      context: ./backend/order-service
+      dockerfile: Dockerfile
+    container_name: freshcart-order-service
+    env_file:
+      - ./backend/order-service/.env
+    ports:
+      - "3004:3004"
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  payment-service:
+    build:
+      context: ./backend/payment-service
+      dockerfile: Dockerfile
+    container_name: freshcart-payment-service
+    env_file:
+      - ./backend/payment-service/.env
+    ports:
+      - "3005:3005"
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: freshcart-api-gateway
+    env_file:
+      - ./backend/api-gateway/.env
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:3001
+      PRODUCT_SERVICE_URL: http://product-service:3002
+      CART_SERVICE_URL: http://cart-service:3003
+      ORDER_SERVICE_URL: http://order-service:3004
+      PAYMENT_SERVICE_URL: http://payment-service:3005
+      FRONTEND_ORIGIN: http://localhost:4200
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - product-service
+      - cart-service
+      - order-service
+      - payment-service
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: freshcart-frontend
+    ports:
+      - "4200:4000"
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+    networks:
+      - freshcart-network
+
+networks:
+  freshcart-network:
+    driver: bridge

@@ -1,0 +1,150 @@
+<div class=" flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-3xl">
+        
+        <h2 class="text-3xl font-bold text-green-600 text-center mb-6">
+        Register
+        </h2>
+
+        <form [formGroup]="registerForm" (ngSubmit)="submitForm()" id="form" class="space-y-4">
+
+        <!-- Name -->
+        <div>
+            <label class="block mb-1 text-gray-700 font-medium" for="name">Full Name</label>
+            <div class="relative">
+            <input formControlName="name" id="name" type="text" placeholder="Full Name"
+                class="w-full pl-10 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+            </div>
+            @if (registerForm.get('name')?.errors && registerForm.get('name')?.touched) {
+                <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle" role="alert">
+                <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <div>
+                    <span class="font-medium">Error</span>
+                    <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                        @if (registerForm.get('name')?.getError('required')) {
+                            <li>name is required</li>
+                        }
+                        @if (registerForm.get('name')?.getError('minlength')) {
+                            <li>name should be more than or equal 2 chars</li>
+                        }
+                        @if (registerForm.get('name')?.getError('maxlength')) {
+                            <li>name should be less than or equal 20 chars</li>
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- Email -->
+        <div>
+            <label class="block mb-1 text-gray-700 font-medium" for="email">Email</label>
+            <div class="relative">
+            <input formControlName="email" id="email" type="email" placeholder="Email" 
+                class="w-full pl-10 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+            </div>
+            @if (registerForm.get('email')?.errors && registerForm.get('email')?.touched) {
+                <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle" role="alert">
+                <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <div>
+                    <span class="font-medium">Error</span>
+                    <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                        @if (registerForm.get('email')?.getError('required')) {
+                            <li>email is required</li>
+                        }
+                        @if (registerForm.get('email')?.getError('email')) {
+                            <li>Please Enter A Valid Email Address</li>
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- Password -->
+        <div>
+            <label class="block mb-1 text-gray-700 font-medium" for="password">Password</label>
+            <div class="relative">
+            <input formControlName="password" id="password" type="password" placeholder="Password"
+                class="w-full pl-10 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+            </div>
+            @if (registerForm.get('password')?.errors && registerForm.get('password')?.touched) {
+                <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle" role="alert">
+                <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <div>
+                    <span class="font-medium">Error</span>
+                    <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                        @if (registerForm.get('password')?.getError('required')) {
+                            <li>password is required</li>
+                        }
+                        @if (registerForm.get('password')?.getError('pattern')) {
+                            <li>Custom Field should Match the Pattern</li>
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+            }
+            
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+            <label class="block mb-1 text-gray-700 font-medium" for="confirm">Confirm Password</label>
+            <div class="relative">
+            <input formControlName="rePassword" id="confirm" type="password" placeholder="Confirm Password"
+                class="w-full pl-10 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+            </div>
+            @if (registerForm.getError('mismatch') && registerForm.get('rePassword')?.touched) {
+                <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle" role="alert">
+                <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <div>
+                    <span class="font-medium">Error</span>
+                    <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                            <li>Password Confirmtion Is Incorrect</li>                        
+                    </ul>
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- phone -->
+        <div>
+            <label class="block mb-1 text-gray-700 font-medium" for="phone">Phone</label>
+            <div class="relative">
+            <input formControlName="phone" id="phone" type="text" placeholder="Phone"
+                class="w-full pl-10 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"/>
+            </div>
+            @if (registerForm.get('phone')?.errors && registerForm.get('phone')?.touched) {
+                <div class="flex p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft border border-danger-subtle" role="alert">
+                <svg class="w-4 h-4 me-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <div>
+                    <span class="font-medium">Error</span>
+                    <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
+                        @if (registerForm.get('phone')?.getError('required')) {
+                            <li>Phone is required</li>
+                        }
+                        @if (registerForm.get('phone')?.getError('pattern')) {
+                            <li>Accept Only Egpyt Phone Numbers</li>
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+            }
+        </div>
+
+        
+        <button type="submit"
+            class="w-full cursor-pointer bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition duration-300">
+            Register
+            @if (isloading) {
+                <span><i class="fas fa-spinner animate-spin"></i></span>
+            }
+        </button>
+            <p class="text-center text-red-600">{{msgError}}</p>
+        </form>
+
+    </div>
+</div>

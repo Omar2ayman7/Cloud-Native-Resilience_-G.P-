@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freshcart-config
+  namespace: freshcart
+data:
+  NODE_ENV: "production"
+  JWT_EXPIRES_IN: "7d"
+
+  SUPABASE_URL: "https://kyxftkvuttoedfqgzmat.supabase.co"
+
+  # Browser-facing addresses. These intentionally match the last working Docker Compose setup.
+  FRONTEND_ORIGIN: "http://localhost:4200,http://freshcart.local:8081"
+  GATEWAY_PUBLIC_URL: "http://localhost:3000"
+
+  PAYMENT_PROVIDER: "mock"
+  STRIPE_CURRENCY: "egp"
+
+  # Internal Kubernetes DNS routing used only by the API Gateway.
+  AUTH_SERVICE_URL: "http://auth-service:3001"
+  PRODUCT_SERVICE_URL: "http://product-service:3002"
+  CART_SERVICE_URL: "http://cart-service:3003"
+  ORDER_SERVICE_URL: "http://order-service:3004"
+  PAYMENT_SERVICE_URL: "http://payment-service:3005"

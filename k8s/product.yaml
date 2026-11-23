@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-deployment
+  namespace: freshcart
+  labels:
+    app: product
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product
+  template:
+    metadata:
+      labels:
+        app: product
+    spec:
+      containers:
+        - name: product
+          image: omaraymane/freshcart-product:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3002
+          env:
+            - name: PORT
+              value: "3002"
+            - name: SUPABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: freshcart-config
+                  key: SUPABASE_URL
+            - name: SUPABASE_SERVICE_ROLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: freshcart-secrets
+                  key: SUPABASE_SERVICE_ROLE_KEY
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "384Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 4
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: freshcart
+  labels:
+    app: product
+spec:
+  type: ClusterIP
+  selector:
+    app: product
+  ports:
+    - name: http
+      port: 3002
+      targetPort: 3002
+      protocol: TCP
